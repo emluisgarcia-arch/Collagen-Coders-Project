@@ -1,8 +1,6 @@
 # Collagen-Coders-Project
 Repo for BINF 2111 semester project. 
-Collagen Coders Project by Emilio Garcia and Dexter Watson
-Emilio Garcia - coder
-Dexter Watson - coder
+Collagen Coders Project by Emilio Garcia (coder) and Dexter Watson (coder)
 
 Our project eill take information about the COL2A1 gene and determine if there are any potentioal issues in the gene
 The program will output where the issue in the gene lies and what genetic problem that can happen.
