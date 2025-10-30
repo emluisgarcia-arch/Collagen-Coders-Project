@@ -18,3 +18,4 @@ Achondrogenesis type 2
 
 We will use FASTA files of the above mentiond diseases and compare them with the FASTA file of a COL2A1 gene that has no issues with it.
 We will use Python and Bio python in this program to achiveve the desired results. 
+(problems that we faced and how we overcame them)
