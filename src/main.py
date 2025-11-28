@@ -1,11 +1,15 @@
 from Bio import SeqIO
 import glob
+import os
+
+# Base directory of this script
+BASE = os.path.dirname(__file__)
 
 # Path to the reference sequence
-ref_file = "COL2A1RefSequenceExample.fasta"
+ref_file = os.path.join(BASE, "../fasta_data/COL2A1RefSequenceExample.fasta")
 
 # Path to folder containing all disease FASTA files
-disease_folder = "fasta_data/"     # <-- your folder
+disease_folder = os.path.join(BASE, "../fasta_data/")     # <-- correct path
 
 # Reads a sequence from FASTA file
 def read_sequence(filepath):
@@ -23,10 +27,8 @@ def compare_sequences(ref_seq, dis_seq):
 
     for i in range(length):
         if ref_seq[i] != dis_seq[i]:
-            # store index+1 so it's biological numbering
             differences.append((i + 1, ref_seq[i], dis_seq[i]))
 
-    # If the lengths differ, record that too
     if len(ref_seq) != len(dis_seq):
         differences.append(("Length difference", len(ref_seq), len(dis_seq)))
 
@@ -38,7 +40,6 @@ def predict_disease(differences):
         if isinstance(pos, int):
             if ref == "G" and var != "G":
                 return "Stickler Syndrome"
-            # add more conditions for other diseases here
 
     if differences:
         return "Unknown Variant"
@@ -56,7 +57,7 @@ for file in glob.glob(disease_folder + "*.fasta"):
     differences = compare_sequences(ref_seq, dis_seq)
     disease = predict_disease(differences)
 
-    filename = file.split("/")[-1]  # print only file name
+    filename = os.path.basename(file)
 
     print("\n==========================")
     print(f"Comparing file: {filename}")
