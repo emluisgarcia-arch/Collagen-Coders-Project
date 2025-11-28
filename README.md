@@ -14,7 +14,7 @@ Early onset familial osteoarthritis - Can cause chronic joint pain, stiffness, s
 Spondyloepiphyseal dysplasia (SED) - Can cause lower back pain, leg pain, stiffness, nerve damage, and difficultly walking
 Achondrogenesis type 2 - A lethal skeletal disease that cause underdeveloped lungs, narrow chest and short limbs.
 
------------------------------------------------=-------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 We will use FASTA files of the above mentiond diseases and compare them with the FASTA file of a COL2A1 gene that has no issues with it.
 We will use Python and Bio python in this program to achiveve the desired results.
@@ -22,4 +22,4 @@ We will use Python and Bio python in this program to achiveve the desired result
 One problem we overcame in order to create this project is the difficultly of finding the fasta data. ClinVar only gives sections of diseased genes. We overcame this by 
 manually making mock fasta data to input to our program. This mock data would take place for demonstration purposes.
 
------------------------------------------------=-------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
