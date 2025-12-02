@@ -52,7 +52,9 @@ def predict_disease(differences):
         return "Unknown Variant"
 
     return "Identical Sequences"
+
 ref_seq = read_sequence(ref_file)
+# Loops through all thr disease files
 for file in dis_files:
     dis_seq = read_sequence(file)
     print(f'Comparing: {file}')
