@@ -1,9 +1,5 @@
 from Bio import SeqIO
-
-
-# Defines the files being compared (these are example files for dempnstration)
-ref_file = "COL2A1RefSequence.fasta"
-dis_files = ["Stickler.fasta", "Osteoarthritis.fasta", "Achondrogenesis.fasta","Spondyloepiphyseal.fasta", "Blank.txt", "COL2A1RefSequence.fasta"]
+import argparse
 
 #Reads the sequence from a FASTA file and returns it as a string.
 def read_sequence(filepath):
@@ -49,15 +45,32 @@ def predict_disease(differences):
             elif pos == 621 and ref != dis:
                 return "\nSpondyloepiphyseal"
     if differences:
-        return "Unknown Variant"
+        return "\nUnknown Variant"
 
     return "Identical Sequences"
 
-ref_seq = read_sequence(ref_file)
-# Loops through all thr disease files
-for file in dis_files:
-    dis_seq = read_sequence(file)
-    print(f'Comparing: {file}')
-    compare = compare_sequences(ref_seq, dis_seq)
-    diffrences = trimmed_diff(compare)
-    print(diffrences, predict_disease(compare))
+def main():
+    parser = argparse.ArgumentParser(
+        description="Compares reference sequence to disease sequences to predict COL2A1-related diseases."
+    )
+    parser.add_argument(
+        "-r", "--ref", required=True, help="Reference FASTA file"
+    )
+    parser.add_argument(
+        "-d", "--disease", nargs="+", required=True,
+        help="One or more disease FASTA files to compare against the reference"
+    )
+    args = parser.parse_args()
+
+    ref_seq = read_sequence(args.ref)
+
+    for file in args.disease:
+        dis_seq = read_sequence(file)
+        print(f'Comparing: {file}')
+        compare = compare_sequences(ref_seq, dis_seq)
+        differences = trimmed_diff(compare)
+        print(differences, predict_disease(compare))
+
+
+if __name__ == "__main__":
+    main()
