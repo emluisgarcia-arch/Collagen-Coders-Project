@@ -2,16 +2,20 @@ from Bio import SeqIO
 import glob
 import os
 
-# Base directory of this script
 BASE = os.path.dirname(__file__)
 
-# Path to the reference sequence
 ref_file = os.path.join(BASE, "../fasta_data/COL2A1RefSequenceExample.fasta")
+disease_folder = os.path.join(BASE, "../fasta_data/")
 
-# Path to folder containing all disease FASTA files
-disease_folder = os.path.join(BASE, "../fasta_data/")     # <-- correct path
+# Known pathogenic sites for COL2A1
+PATHOGENIC_MAP = {
+    "Stickler Syndrome": [216, 873, 219, 1300],
+    "Achondrogenesis Type 2": [711, 1170, 504],
+    "Spondyloepiphyseal Dysplasia": [421, 1504],
+    "Osteoarthritis": [1091, 780],
+}
 
-# Reads a sequence from FASTA file
+
 def read_sequence(filepath):
     try:
         for record in SeqIO.parse(filepath, "fasta"):
@@ -20,7 +24,7 @@ def read_sequence(filepath):
         print(f"File not found: {filepath}")
     return ""
 
-# Compare reference to variant
+
 def compare_sequences(ref_seq, dis_seq):
     differences = []
     length = min(len(ref_seq), len(dis_seq))
@@ -34,33 +38,47 @@ def compare_sequences(ref_seq, dis_seq):
 
     return differences
 
-# Very simple disease logic (expand later)
+
 def predict_disease(differences):
+    matched = []
+
+    # scan all differences
     for pos, ref, var in differences:
-        if isinstance(pos, int):
-            if ref == "G" and var != "G":
-                return "Stickler Syndrome"
+        if not isinstance(pos, int):
+            continue
 
-    if differences:
-        return "Unknown Variant"
+        # check if pos is in ANY disease list
+        for disease, sites in PATHOGENIC_MAP.items():
+            if pos in sites:
+                matched.append((disease, pos))
 
-    return "Identical Sequences"
+    if not matched:
+        return ["Unknown Variant"]
 
-# ---------------- MAIN ----------------
+    return matched
+
+
+# ------------ MAIN ------------
 
 ref_seq = read_sequence(ref_file)
 
-# Loop through every FASTA in folder
 for file in glob.glob(disease_folder + "*.fasta"):
 
     dis_seq = read_sequence(file)
+
     differences = compare_sequences(ref_seq, dis_seq)
-    disease = predict_disease(differences)
+    predicted = predict_disease(differences)
 
     filename = os.path.basename(file)
 
     print("\n==========================")
     print(f"Comparing file: {filename}")
     print("==========================")
-    print("Differences:", differences)
-    print("Predicted Disease:", disease)
+
+    for pos, ref, var in differences:
+        print(f"Position {pos}: {ref} -> {var}")
+
+    print("\nPredictions:")
+    for d in predicted:
+        print("  ", d)
+
